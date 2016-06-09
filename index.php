@@ -14,16 +14,19 @@ require_once 'merchants.inc.php';
 $img_path = '/img_optimized';
 
 $html = '';
-$header = '';
+$header = [];
 $cachekiller = bin2hex( random_bytes( 5 ) );
 
 foreach ( $merchants as $alt => $image ) {
 	$html .= "<img src='$img_path/$image?ck$cachekiller' width='175' height='75' alt='$alt'>";
-	$header .= "<$img_path/$image?ck$cachekiller>; rel=preload, ";
+	$header[] = "<$img_path/$image?ck$cachekiller>; rel=preload; as=image";
 }
 
 if ( isset( $_GET['push'] ) ) {
-	header( "Link: $header" );
+	// header( "Link: $header" );
+	foreach ($header as $link) {
+		header( "Link: $link", false );
+	}
 }
 
 ?><!DOCTYPE html>
